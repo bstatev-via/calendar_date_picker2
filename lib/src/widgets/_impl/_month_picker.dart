@@ -98,13 +98,16 @@ class _MonthPickerState extends State<_MonthPicker> {
         widget.initialMonth.year >= widget.config.firstDate.year &&
             widget.initialMonth.year <= widget.config.lastDate.year;
     if (isMonthSelectable) {
+      var isAfterFirst = true;
+      var isBeforeLast = true;
       if (widget.initialMonth.year == widget.config.firstDate.year) {
-        isMonthSelectable = month >= widget.config.firstDate.month;
+        isAfterFirst = month >= widget.config.firstDate.month;
       }
 
       if (widget.initialMonth.year == widget.config.lastDate.year) {
-        isMonthSelectable = month <= widget.config.lastDate.month;
+        isBeforeLast = month <= widget.config.lastDate.month;
       }
+      isMonthSelectable = isAfterFirst && isBeforeLast;
     }
     final monthSelectableFromPredicate = widget.config.selectableMonthPredicate
             ?.call(widget.initialMonth.year, month) ??
@@ -115,12 +118,12 @@ class _MonthPickerState extends State<_MonthPicker> {
     if (isSelected) {
       textColor = colorScheme.onPrimary;
     } else if (!isMonthSelectable) {
-      textColor = colorScheme.onSurface.withOpacity(0.38);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.38);
     } else if (isCurrentMonth) {
       textColor =
           widget.config.selectedDayHighlightColor ?? colorScheme.primary;
     } else {
-      textColor = colorScheme.onSurface.withOpacity(0.87);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.87);
     }
 
     TextStyle? itemStyle = widget.config.monthTextStyle ??
